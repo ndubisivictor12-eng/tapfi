@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TapFi</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0b0d12;
+      color: white;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 480px;
+      margin: auto;
+      padding: 22px 18px 100px;
+      text-align: center;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .profile {
+      background: #171a22;
+      padding: 9px 13px;
+      border-radius: 14px;
+      font-size: 13px;
+    }
+
+    .label {
+      color: #8e95a5;
+      font-size: 14px;
+    }
+
+    .balance {
+      font-size: 42px;
+      font-weight: bold;
+      margin-top: 6px;
+    }
+
+    .coin {
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      margin: 35px auto 20px;
+      background: linear-gradient(145deg, #ffd83d, #f59e0b);
+      border: 8px solid #3b3217;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 75px;
+      box-shadow: 0 0 45px rgba(245, 158, 11, 0.25);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.08s;
+    }
+
+    .coin:active {
+      transform: scale(0.93);
+    }
+
+    .tap-text {
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .energy {
+      margin-top: 22px;
+    }
+
+    .energy-bar {
+      height: 9px;
+      background: #222631;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 9px;
+    }
+
+    .energy-fill {
+      height: 100%;
+      width: 100%;
+      background: #f59e0b;
+      transition: width 0.2s;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .card {
+      background: #151820;
+      border: 1px solid #252936;
+      border-radius: 18px;
+      padding: 17px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .card-icon {
+      font-size: 25px;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-weight: bold;
+    }
+
+    .card-sub {
+      color: #8e95a5;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .status {
+      color: #8e95a5;
+      font-size: 13px;
+      margin-top: 18px;
+      min-height: 18px;
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #101219;
+      border-top: 1px solid #242733;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: 480px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 9px 10px;
+    }
+
+    .nav button {
+      background: none;
+      border: none;
+      color: #8e95a5;
+      padding: 8px 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .nav button span {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+
+    .nav button.active {
+      color: #f59e0b;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="top">
+    <div class="logo">TapFi 🚀</div>
+    <div class="profile">👤 Player</div>
+  </div>
+
+  <div class="label">Your TapFi balance</div>
+  <div class="balance" id="balance">0</div>
+
+  <div class="coin" id="tapButton">
+    🪙
+  </div>
+
+  <div class="tap-text">TAP TO EARN</div>
+
+  <div class="energy">
+    <div>⚡ <span id="energy">1000</span> / 1000</div>
+
+    <div class="energy-bar">
+      <div class="energy-fill" id="energyFill"></div>
+    </div>
+  </div>
+
+  <div class="cards">
+
+    <div class="card" id="dailyButton">
+      <div class="card-icon">🎁</div>
+      <div class="card-title">Daily Bonus</div>
+      <div class="card-sub">Claim your daily reward</div>
+    </div>
+
+    <div class="card" id="inviteButton">
+      <div class="card-icon">👥</div>
+      <div class="card-title">Invite Friends</div>
+      <div class="card-sub">Earn from referrals</div>
+    </div>
+
+    <div class="card" id="tasksButton">
+      <div class="card-icon">📋</div>
+      <div class="card-title">Tasks</div>
+      <div class="card-sub">Complete tasks & earn</div>
+    </div>
+
+    <div class="card" id="walletButton">
+      <div class="card-icon">💰</div>
+      <div class="card-title">Wallet</div>
+      <div class="card-sub">Manage your rewards</div>
+    </div>
+
+  </div>
+
+  <div class="status" id="status">
+    Tap the coin to start earning.
+  </div>
+
+</div>
+
+<div class="nav">
+  <div class="nav-inner">
+
+    <button class="active">
+      <span>🏠</span>
+      Home
+    </button>
+
+    <button id="navTasks">
+      <span>📋</span>
+      Tasks
+    </button>
+
+    <button id="navFriends">
+      <span>👥</span>
+      Friends
+    </button>
+
+    <button id="navWallet">
+      <span>💰</span>
+      Wallet
+    </button>
+
+  </div>
+</div>
+
+<script>
+
+let balance = 0;
+let energy = 1000;
+const maxEnergy = 1000;
+const coinsPerTap = 10;
+
+const balanceElement = document.getElementById("balance");
+const energyElement = document.getElementById("energy");
+const energyFill = document.getElementById("energyFill");
+const statusElement = document.getElementById("status");
+
+function updateScreen() {
+
+  balanceElement.textContent = balance.toLocaleString();
+
+  energyElement.textContent = energy.toLocaleString();
+
+  energyFill.style.width =
+    (energy / maxEnergy * 100) + "%";
+}
+
+document.getElementById("tapButton").addEventListener("click", function() {
+
+  if (energy <= 0) {
+    statusElement.textContent =
+      "⚡ You are out of energy. Come back later.";
+    return;
+  }
+
+  balance += coinsPerTap;
+  energy -= 1;
+
+  statusElement.textContent =
+    "+10 TapFi coins earned!";
+
+  updateScreen();
+
+});
+
+document.getElementById("dailyButton").addEventListener("click", function() {
+
+  balance += 500;
+
+  statusElement.textContent =
+    "🎁 Daily bonus claimed: +500 coins!";
+
+  updateScreen();
+
+});
+
+document.getElementById("inviteButton").addEventListener("click", function() {
+
+  statusElement.textContent =
+    "👥 Referral system coming soon.";
+
+});
+
+document.getElementById("tasksButton").addEventListener("click", function() {
+
+  statusElement.textContent =
+    "📋 Tasks system coming soon.";
+
+});
+
+document.getElementById("walletButton").addEventListener("click", function() {
+
+  statusElement.textContent =
+    "💰 Wallet system coming soon.";
+
+});
+
+document.getElementById("navTasks").addEventListener("click", function() {
+
+  statusElement.textContent =
+    "📋 Tasks system coming soon.";
+
+});
+
+document.getElementById("navFriends").addEventListener("click", function() {
+
+  statusElement.textContent =
+    "👥 Friends and referrals coming soon.";
+
+});
+
+document.getElementById("navWallet").addEventListener("click", function() {
+
+  statusElement.textContent =
+    "💰 Wallet coming soon.";
+
+});
+
+updateScreen();
+
+</script>
+
+</body>
+</html>
